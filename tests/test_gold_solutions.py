@@ -37,11 +37,20 @@ def _solve_fs_cleanup_001(work_dir: Path) -> None:
     (work_dir / "backup.bak").unlink()
 
 
+def _solve_fs_merge_001(work_dir: Path) -> None:
+    part1 = (work_dir / "part1.txt").read_text(encoding="utf-8")
+    part2 = (work_dir / "part2.txt").read_text(encoding="utf-8")
+    (work_dir / "combined.md").write_text(part1 + part2, encoding="utf-8")
+    (work_dir / "part1.txt").unlink()
+    (work_dir / "part2.txt").unlink()
+
+
 GOLD_SOLVERS: dict[str, Callable[[Path], None]] = {
     "fs-rename-001": _solve_fs_rename_001,
     "fs-create-001": _solve_fs_create_001,
     "fs-append-001": _solve_fs_append_001,
     "fs-cleanup-001": _solve_fs_cleanup_001,
+    "fs-merge-001": _solve_fs_merge_001,
 }
 
 

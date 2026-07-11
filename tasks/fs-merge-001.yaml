@@ -1,0 +1,20 @@
+id: fs-merge-001
+version: 1
+prompt: >
+  The directory /work contains part1.txt and part2.txt. Create a new file
+  combined.md containing the contents of part1.txt followed by the
+  contents of part2.txt, then delete part1.txt and part2.txt.
+docker_image: mcp/filesystem
+server_args: ["/work"]
+network: none
+mem_limit: 512m
+initial_state: state/fs-merge-001
+grader:
+  kind: file_match
+  expect_files: [combined.md]
+  forbid_files: [part1.txt, part2.txt]
+  expect_content:
+    combined.md: ["Introduction paragraph.", "Conclusion paragraph."]
+timeout_s: 180
+max_turns: 15
+n_trials: 10
