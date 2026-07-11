@@ -28,7 +28,7 @@ async def test_single_real_trial(tmp_path):
     task = load_task(TASK_YAML)
     store = JsonlStore(tmp_path / "r.jsonl")
     results = await run_task_trials(
-        task, "gemini/gemini-2.5-flash", 1, tmp_path / "runs", store
+        task, "gemini/gemini-3.5-flash", 1, tmp_path / "runs", store
     )
     (r,) = results
     # The trial must complete and be graded - success either way is informative,

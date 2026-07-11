@@ -30,7 +30,7 @@ def version() -> None:
 @app.command()
 def run(
     task: Path = typer.Option(Path("tasks/fs-rename-001.yaml"), help="Task YAML file."),
-    model: str = typer.Option("gemini/gemini-2.5-flash", help="LiteLLM model id."),
+    model: str = typer.Option("gemini/gemini-3.5-flash", help="LiteLLM model id."),
     n: int = typer.Option(10, help="Trials per task."),
     out: Path = typer.Option(Path("results"), help="Output directory."),
 ) -> None:
