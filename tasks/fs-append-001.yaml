@@ -1,0 +1,19 @@
+id: fs-append-001
+version: 1
+prompt: >
+  The file /work/log.txt contains a log of system events. Append a new
+  line reading exactly "Task completed successfully." to the end of the
+  file. Do not remove or modify any of the existing content.
+docker_image: mcp/filesystem
+server_args: ["/work"]
+network: none
+mem_limit: 512m
+initial_state: state/fs-append-001
+grader:
+  kind: file_match
+  expect_files: [log.txt]
+  expect_content:
+    log.txt: ["System started.", "Task completed successfully."]
+timeout_s: 180
+max_turns: 15
+n_trials: 10

@@ -27,9 +27,15 @@ def _solve_fs_create_001(work_dir: Path) -> None:
     )
 
 
+def _solve_fs_append_001(work_dir: Path) -> None:
+    f = work_dir / "log.txt"
+    f.write_text(f.read_text(encoding="utf-8") + "Task completed successfully.\n", encoding="utf-8")
+
+
 GOLD_SOLVERS: dict[str, Callable[[Path], None]] = {
     "fs-rename-001": _solve_fs_rename_001,
     "fs-create-001": _solve_fs_create_001,
+    "fs-append-001": _solve_fs_append_001,
 }
 
 
