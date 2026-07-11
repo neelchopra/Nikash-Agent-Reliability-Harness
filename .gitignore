@@ -1,0 +1,17 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+uv.lock
+
+# harness output
+results/
+.arh_runs/
+
+# Claude artifacts - never commit
+.remember/
+docs/superpowers/
+compass_artifact_*.md
