@@ -1,0 +1,20 @@
+id: fs-rename-001
+version: 1
+prompt: >
+  In the directory /work there are text files with the .txt extension.
+  Rename every .txt file to have a .md extension instead, keeping the
+  file contents identical. Do not modify any other files.
+docker_image: mcp/filesystem
+server_args: ["/work"]
+network: none
+mem_limit: 512m
+initial_state: state/fs-rename-001
+grader:
+  kind: file_match
+  expect_files: [notes.md, report.md]
+  forbid_files: ["*.txt"]
+  expect_content:
+    notes.md: "Buy milk"
+timeout_s: 180
+max_turns: 15
+n_trials: 10
