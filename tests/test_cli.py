@@ -46,3 +46,18 @@ def test_run_command_invokes_runner(tmp_path, monkeypatch):
     ])
     assert result.exit_code == 0, result.output
     assert called == {"task_id": "fs-rename-001", "model": "fake/model", "n": 2}
+
+
+def test_tasks_validate_all_pass():
+    result = runner.invoke(app, ["tasks", "validate", "--tasks-dir", "tasks"])
+    assert result.exit_code == 0, result.output
+    assert "all" in result.output and "valid" in result.output
+
+
+def test_tasks_validate_reports_failure(tmp_path):
+    bad_dir = tmp_path / "badtasks"
+    bad_dir.mkdir()
+    (bad_dir / "broken.yaml").write_text("id: x\n", encoding="utf-8")
+    result = runner.invoke(app, ["tasks", "validate", "--tasks-dir", str(bad_dir)])
+    assert result.exit_code == 1
+    assert "FAIL" in result.output

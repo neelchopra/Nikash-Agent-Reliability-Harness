@@ -13,6 +13,9 @@ from arh.tasks import load_task
 app = typer.Typer(help="Agent Reliability Harness: pass^k for MCP tool use.")
 console = Console()
 
+tasks_app = typer.Typer(help="Task management commands.")
+app.add_typer(tasks_app, name="tasks")
+
 
 @app.callback()
 def main() -> None:
@@ -66,6 +69,30 @@ def report(results_file: Path = typer.Argument(..., help="A results .jsonl file.
         typer.echo("no results found")
         raise typer.Exit(code=1)
     console.print(render_table(summarize(rows)))
+
+
+@tasks_app.command("validate")
+def tasks_validate(
+    tasks_dir: Path = typer.Option(Path("tasks"), help="Directory containing task YAML files."),
+) -> None:
+    """Validate every task YAML file in a directory."""
+    yaml_files = sorted(tasks_dir.glob("*.yaml"))
+    if not yaml_files:
+        typer.echo(f"no task YAML files found under {tasks_dir}")
+        raise typer.Exit(code=1)
+    failures = 0
+    for path in yaml_files:
+        try:
+            task = load_task(path)
+        except Exception as e:
+            failures += 1
+            console.print(f"  [red]FAIL[/red]  {path.name}: {e}")
+        else:
+            console.print(f"  [green]OK[/green]    {path.name}  ({task.id})")
+    if failures:
+        console.print(f"[red]{failures} task(s) failed validation[/red]")
+        raise typer.Exit(code=1)
+    console.print(f"[green]all {len(yaml_files)} tasks valid[/green]")
 
 
 if __name__ == "__main__":
