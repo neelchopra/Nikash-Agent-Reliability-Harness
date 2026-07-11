@@ -45,12 +45,18 @@ def _solve_fs_merge_001(work_dir: Path) -> None:
     (work_dir / "part2.txt").unlink()
 
 
+def _solve_fs_protect_001(work_dir: Path) -> None:
+    f = work_dir / "draft.md"
+    f.write_text("## Status: Draft\n" + f.read_text(encoding="utf-8"), encoding="utf-8")
+
+
 GOLD_SOLVERS: dict[str, Callable[[Path], None]] = {
     "fs-rename-001": _solve_fs_rename_001,
     "fs-create-001": _solve_fs_create_001,
     "fs-append-001": _solve_fs_append_001,
     "fs-cleanup-001": _solve_fs_cleanup_001,
     "fs-merge-001": _solve_fs_merge_001,
+    "fs-protect-001": _solve_fs_protect_001,
 }
 
 
