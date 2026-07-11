@@ -1,7 +1,8 @@
-"""Real end-to-end: Gemini 2.5 Flash driving the dockerized MCP filesystem server.
+"""Real end-to-end: GitHub Models gpt-4o-mini driving the dockerized MCP filesystem server.
 
 Run explicitly with:  uv run pytest -m e2e -v
-Requires: Docker Desktop running, mcp/filesystem pulled, GEMINI_API_KEY set.
+Requires: Docker Desktop running, mcp/filesystem pulled, GITHUB_API_KEY set
+(a GitHub personal access token with "models: read" permission).
 """
 
 import os
@@ -20,15 +21,15 @@ TASK_YAML = Path(__file__).parent.parent / "tasks" / "fs-rename-001.yaml"
 
 @pytest.fixture(autouse=True)
 def require_key():
-    if not os.environ.get("GEMINI_API_KEY"):
-        pytest.skip("GEMINI_API_KEY not set")
+    if not os.environ.get("GITHUB_API_KEY"):
+        pytest.skip("GITHUB_API_KEY not set")
 
 
 async def test_single_real_trial(tmp_path):
     task = load_task(TASK_YAML)
     store = JsonlStore(tmp_path / "r.jsonl")
     results = await run_task_trials(
-        task, "gemini/gemini-3.5-flash", 1, tmp_path / "runs", store
+        task, "github/gpt-4o-mini", 1, tmp_path / "runs", store
     )
     (r,) = results
     # The trial must complete and be graded - success either way is informative,
