@@ -17,10 +17,12 @@ def grade_file_match(work_dir: Path, spec: GraderSpec) -> tuple[bool, str]:
         hits = sorted(p.name for p in work_dir.rglob(pattern))
         if hits:
             return False, f"forbidden files present ({pattern}): {hits}"
-    for name, substring in spec.expect_content.items():
+    for name, substrings in spec.expect_content.items():
         f = work_dir / name
         if not f.is_file():
             return False, f"expected file missing: {name}"
-        if substring not in f.read_text(encoding="utf-8"):
-            return False, f"content check failed: {name} does not contain {substring!r}"
+        text = f.read_text(encoding="utf-8")
+        for substring in substrings:
+            if substring not in text:
+                return False, f"content check failed: {name} does not contain {substring!r}"
     return True, "all checks passed"

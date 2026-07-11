@@ -2,14 +2,21 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class GraderSpec(BaseModel):
     kind: Literal["file_match"]
     expect_files: list[str] = Field(default_factory=list)
     forbid_files: list[str] = Field(default_factory=list)  # glob patterns, e.g. "*.txt"
-    expect_content: dict[str, str] = Field(default_factory=dict)  # file -> required substring
+    expect_content: dict[str, list[str]] = Field(default_factory=dict)  # file -> required substrings (all must be present)
+
+    @field_validator("expect_content", mode="before")
+    @classmethod
+    def _coerce_content_values_to_lists(cls, v):
+        if not isinstance(v, dict):
+            return v
+        return {k: ([val] if isinstance(val, str) else val) for k, val in v.items()}
 
 
 class Task(BaseModel):

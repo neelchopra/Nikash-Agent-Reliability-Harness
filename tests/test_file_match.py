@@ -40,3 +40,27 @@ def test_fail_on_content_mismatch(tmp_path):
     ok, detail = grade_file_match(d, SPEC)
     assert not ok
     assert "notes.md" in detail
+
+
+MULTI_SPEC = GraderSpec(
+    kind="file_match",
+    expect_content={"log.txt": ["System started.", "Task completed successfully."]},
+)
+
+
+def test_pass_when_all_required_substrings_present(tmp_path):
+    d = _seed(tmp_path, {"log.txt": "System started.\nTask completed successfully.\n"})
+    ok, detail = grade_file_match(d, MULTI_SPEC)
+    assert ok, detail
+
+
+def test_fail_when_one_of_multiple_substrings_missing(tmp_path):
+    d = _seed(tmp_path, {"log.txt": "System started.\n"})
+    ok, detail = grade_file_match(d, MULTI_SPEC)
+    assert not ok
+    assert "Task completed successfully." in detail
+
+
+def test_single_string_expect_content_coerces_to_list():
+    spec = GraderSpec(kind="file_match", expect_content={"notes.md": "Buy milk"})
+    assert spec.expect_content == {"notes.md": ["Buy milk"]}
