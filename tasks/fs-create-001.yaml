@@ -1,0 +1,19 @@
+id: fs-create-001
+version: 1
+prompt: >
+  The directory /work contains several files. Create a new file called
+  index.md in /work that lists the name of every file currently in the
+  directory, one per line. Do not modify or delete any existing files.
+docker_image: mcp/filesystem
+server_args: ["/work"]
+network: none
+mem_limit: 512m
+initial_state: state/fs-create-001
+grader:
+  kind: file_match
+  expect_files: [apple.txt, banana.txt, cherry.txt, index.md]
+  expect_content:
+    index.md: ["apple.txt"]
+timeout_s: 180
+max_turns: 15
+n_trials: 10

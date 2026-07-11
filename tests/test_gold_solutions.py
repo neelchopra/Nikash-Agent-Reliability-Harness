@@ -21,8 +21,15 @@ def _solve_fs_rename_001(work_dir: Path) -> None:
     (work_dir / "report.txt").rename(work_dir / "report.md")
 
 
+def _solve_fs_create_001(work_dir: Path) -> None:
+    (work_dir / "index.md").write_text(
+        "apple.txt\nbanana.txt\ncherry.txt\n", encoding="utf-8"
+    )
+
+
 GOLD_SOLVERS: dict[str, Callable[[Path], None]] = {
     "fs-rename-001": _solve_fs_rename_001,
+    "fs-create-001": _solve_fs_create_001,
 }
 
 
